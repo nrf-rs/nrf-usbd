@@ -6,21 +6,18 @@
 //!   * Different events are used to initiate transfers.
 //!   * No notification when the status stage is ACK'd.
 
-mod errata;
-
-use crate::{
-    clocks::{Clocks, ExternalOscillator},
-    pac::USBD,
-};
-use core::sync::atomic::{compiler_fence, Ordering};
 use core::cell::Cell;
 use core::mem::MaybeUninit;
-use cortex_m::interrupt::{self, Mutex};
+use core::sync::atomic::{compiler_fence, Ordering};
+use cortex_m::interrupt::{self, CriticalSection, Mutex};
 use usb_device::{
     bus::{PollResult, UsbBus, UsbBusAllocator},
     endpoint::{EndpointAddress, EndpointType},
     UsbDirection, UsbError,
 };
+
+use crate::pac::usbd::RegisterBlock;
+use crate::{errata, UsbPeripheral};
 
 fn dma_start() {
     compiler_fence(Ordering::Release);
@@ -62,8 +59,8 @@ struct EP0State {
 }
 
 /// USB device implementation.
-pub struct Usbd<'c> {
-    periph: Mutex<USBD>,
+pub struct Usbd<'c, T: UsbPeripheral> {
+    _periph: Mutex<T>,
     // argument passed to `UsbDeviceBuilder.max_packet_size_0`
     max_packet_size_0: u16,
     bufs: Buffers,
@@ -78,19 +75,16 @@ pub struct Usbd<'c> {
     _clocks: &'c (),
 }
 
-impl<'c> Usbd<'c> {
+impl<'c, T: UsbPeripheral> Usbd<'c, T> {
     /// Creates a new USB bus, taking ownership of the raw peripheral.
     ///
     /// # Parameters
     ///
     /// * `periph`: The raw USBD peripheral.
     #[inline]
-    pub fn new<L, LSTAT>(
-        periph: USBD,
-        _clocks: &'c Clocks<ExternalOscillator, L, LSTAT>,
-    ) -> UsbBusAllocator<Self> {
+    pub fn new(periph: T) -> UsbBusAllocator<Self> {
         UsbBusAllocator::new(Self {
-            periph: Mutex::new(periph),
+            _periph: Mutex::new(periph),
             max_packet_size_0: 0,
             bufs: Buffers::new(),
             used_in: 0,
@@ -108,9 +102,17 @@ impl<'c> Usbd<'c> {
         })
     }
 
+    fn regs<'a>(&self, _cs: &'a CriticalSection) -> &'a RegisterBlock {
+        unsafe { &*(T::REGISTERS as *const RegisterBlock) }
+    }
+
     /// Fetches the address assigned to the device (only valid when device is configured).
     pub fn device_address(&self) -> u8 {
-        unsafe { &*USBD::ptr() }.usbaddr.read().addr().bits()
+        unsafe { &*(T::REGISTERS as *const RegisterBlock) }
+            .usbaddr
+            .read()
+            .addr()
+            .bits()
     }
 
     fn is_used(&self, ep: EndpointAddress) -> bool {
@@ -131,7 +133,12 @@ impl<'c> Usbd<'c> {
         }
     }
 
-    fn read_control_setup(&self, regs: &USBD, buf: &mut [u8], ep0_state: &mut EP0State) -> usb_device::Result<usize> {
+    fn read_control_setup(
+        &self,
+        regs: &RegisterBlock,
+        buf: &mut [u8],
+        ep0_state: &mut EP0State,
+    ) -> usb_device::Result<usize> {
         const SETUP_LEN: usize = 8;
 
         if buf.len() < SETUP_LEN {
@@ -158,7 +165,7 @@ impl<'c> Usbd<'c> {
         ep0_state.remaining_size = (buf[6] as u16) | ((buf[7] as u16) << 8);
         ep0_state.is_set_address = (buf[0] == 0x00) && (buf[1] == 0x05);
 
-        if ep0_state.direction == UsbDirection::Out  {
+        if ep0_state.direction == UsbDirection::Out {
             regs.tasks_ep0rcvout
                 .write(|w| w.tasks_ep0rcvout().set_bit());
         }
@@ -167,7 +174,7 @@ impl<'c> Usbd<'c> {
     }
 }
 
-impl UsbBus for Usbd<'_> {
+impl<T: UsbPeripheral> UsbBus for Usbd<'_, T> {
     fn alloc_ep(
         &mut self,
         ep_dir: UsbDirection,
@@ -195,14 +202,8 @@ impl UsbBus for Usbd<'_> {
         }
 
         let (used, lens) = match ep_dir {
-            UsbDirection::In => (
-                &mut self.used_in,
-                &mut self.bufs.in_lens,
-            ),
-            UsbDirection::Out => (
-                &mut self.used_out,
-                &mut self.bufs.out_lens,
-            ),
+            UsbDirection::In => (&mut self.used_in, &mut self.bufs.in_lens),
+            UsbDirection::Out => (&mut self.used_out, &mut self.bufs.out_lens),
         };
 
         let alloc_index = match ep_type {
@@ -250,7 +251,7 @@ impl UsbBus for Usbd<'_> {
     #[inline]
     fn enable(&mut self) {
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
 
             errata::pre_enable();
 
@@ -270,7 +271,7 @@ impl UsbBus for Usbd<'_> {
     #[inline]
     fn reset(&self) {
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
 
             // TODO: Initialize ISO buffers
 
@@ -316,7 +317,7 @@ impl UsbBus for Usbd<'_> {
         // A 0-length write to Control EP 0 is a status stage acknowledging a control write xfer
         if ep_addr.index() == 0 && buf.is_empty() {
             let exit = interrupt::free(|cs| {
-                let regs = self.periph.borrow(cs);
+                let regs = self.regs(cs);
 
                 let ep0_state = self.ep0_state.borrow(cs).get();
 
@@ -326,7 +327,8 @@ impl UsbBus for Usbd<'_> {
                 }
 
                 if ep0_state.direction == UsbDirection::Out {
-                    regs.tasks_ep0status.write(|w| w.tasks_ep0status().set_bit());
+                    regs.tasks_ep0status
+                        .write(|w| w.tasks_ep0status().set_bit());
                     return true;
                 }
 
@@ -334,7 +336,8 @@ impl UsbBus for Usbd<'_> {
                     // Device sent all the requested data, no need to send ZLP.
                     // Host will issue an OUT transfer in this case, device should
                     // respond with a status stage.
-                    regs.tasks_ep0status.write(|w| w.tasks_ep0status().set_bit());
+                    regs.tasks_ep0status
+                        .write(|w| w.tasks_ep0status().set_bit());
                     return true;
                 }
 
@@ -353,7 +356,7 @@ impl UsbBus for Usbd<'_> {
         }
 
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
             let busy_in_endpoints = self.busy_in_endpoints.borrow(cs);
 
             if busy_in_endpoints.get() & (1 << i) != 0 {
@@ -417,7 +420,8 @@ impl UsbBus for Usbd<'_> {
                 });
 
                 let mut ep0_state = self.ep0_state.borrow(cs).get();
-                ep0_state.remaining_size = ep0_state.remaining_size.saturating_sub(buf.len() as u16);
+                ep0_state.remaining_size =
+                    ep0_state.remaining_size.saturating_sub(buf.len() as u16);
                 self.ep0_state.borrow(cs).set(ep0_state);
 
                 // Hack: trigger status stage if the IN transfer is not acknowledged after a few frames,
@@ -436,7 +440,11 @@ impl UsbBus for Usbd<'_> {
             // Kick off device -> host transmission. This starts DMA, so a compiler fence is needed.
             dma_start();
             regs.tasks_startepin[i].write(|w| w.tasks_startepin().set_bit());
-            while regs.events_endepin[i].read().events_endepin().bit_is_clear() {}
+            while regs.events_endepin[i]
+                .read()
+                .events_endepin()
+                .bit_is_clear()
+            {}
             regs.events_endepin[i].reset();
             dma_end();
 
@@ -461,7 +469,7 @@ impl UsbBus for Usbd<'_> {
 
         let i = ep_addr.index();
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
 
             // Control EP 0 is special
             if i == 0 {
@@ -474,10 +482,15 @@ impl UsbBus for Usbd<'_> {
                     let n = self.read_control_setup(regs, buf, &mut state)?;
                     ep0_state.set(state);
 
-                    return Ok(n)
+                    return Ok(n);
                 } else {
                     // Is the endpoint ready?
-                    if regs.events_ep0datadone.read().events_ep0datadone().bit_is_clear() {
+                    if regs
+                        .events_ep0datadone
+                        .read()
+                        .events_ep0datadone()
+                        .bit_is_clear()
+                    {
                         // Not yet ready.
                         return Err(UsbError::WouldBlock);
                     }
@@ -501,7 +514,8 @@ impl UsbBus for Usbd<'_> {
             if i == 0 {
                 regs.events_ep0datadone.reset();
             } else {
-                regs.epdatastatus.write(|w| unsafe { w.bits(1 << (i + 16)) });
+                regs.epdatastatus
+                    .write(|w| unsafe { w.bits(1 << (i + 16)) });
             }
 
             // We checked that the endpoint has data, time to read it
@@ -516,14 +530,20 @@ impl UsbBus for Usbd<'_> {
                 &regs.epout6,
                 &regs.epout7,
             ];
-            epout[i].ptr.write(|w| unsafe { w.bits(buf.as_ptr() as u32) });
+            epout[i]
+                .ptr
+                .write(|w| unsafe { w.bits(buf.as_ptr() as u32) });
             // MAXCNT must match SIZE
             epout[i].maxcnt.write(|w| unsafe { w.bits(size) });
 
             dma_start();
             regs.events_endepout[i].reset();
             regs.tasks_startepout[i].write(|w| w.tasks_startepout().set_bit());
-            while regs.events_endepout[i].read().events_endepout().bit_is_clear() {}
+            while regs.events_endepout[i]
+                .read()
+                .events_endepout()
+                .bit_is_clear()
+            {}
             regs.events_endepout[i].reset();
             dma_end();
 
@@ -538,11 +558,12 @@ impl UsbBus for Usbd<'_> {
 
     fn set_stalled(&self, ep_addr: EndpointAddress, stalled: bool) {
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
 
             unsafe {
                 if ep_addr.index() == 0 {
-                    regs.tasks_ep0stall.write(|w| w.tasks_ep0stall().bit(stalled));
+                    regs.tasks_ep0stall
+                        .write(|w| w.tasks_ep0stall().bit(stalled));
                 } else {
                     regs.epstall.write(|w| {
                         w.ep()
@@ -564,7 +585,7 @@ impl UsbBus for Usbd<'_> {
 
     fn is_stalled(&self, ep_addr: EndpointAddress) -> bool {
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
 
             let i = ep_addr.index();
             match ep_addr.direction() {
@@ -577,7 +598,7 @@ impl UsbBus for Usbd<'_> {
     #[inline]
     fn suspend(&self) {
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
             regs.lowpower.write(|w| w.lowpower().low_power());
         });
     }
@@ -585,7 +606,7 @@ impl UsbBus for Usbd<'_> {
     #[inline]
     fn resume(&self) {
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
 
             errata::pre_wakeup();
 
@@ -595,7 +616,7 @@ impl UsbBus for Usbd<'_> {
 
     fn poll(&self) -> PollResult {
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
             let busy_in_endpoints = self.busy_in_endpoints.borrow(cs);
 
             if regs.events_usbreset.read().events_usbreset().bit_is_set() {
@@ -624,7 +645,8 @@ impl UsbBus for Usbd<'_> {
                     let frame_counter = regs.framecntr.read().framecntr().bits();
                     if frame_counter.wrapping_sub(counter) >= 5 {
                         // Send a status stage to ACK a pending OUT transfer
-                        regs.tasks_ep0status.write(|w| w.tasks_ep0status().set_bit());
+                        regs.tasks_ep0status
+                            .write(|w| w.tasks_ep0status().set_bit());
 
                         // reset the state
                         state.in_transfer_state = TransferState::NoTransfer;
@@ -636,7 +658,12 @@ impl UsbBus for Usbd<'_> {
             // Check for any finished transmissions.
             let mut in_complete = 0;
             let mut out_complete = 0;
-            if regs.events_ep0datadone.read().events_ep0datadone().bit_is_set() {
+            if regs
+                .events_ep0datadone
+                .read()
+                .events_ep0datadone()
+                .bit_is_set()
+            {
                 let ep0_state = self.ep0_state.borrow(cs).get();
                 if ep0_state.direction == UsbDirection::In {
                     // Clear event, since we must only report this once.
@@ -686,9 +713,8 @@ impl UsbBus for Usbd<'_> {
                 ep_setup = 1;
 
                 // Reset shorts
-                regs.shorts.modify(|_, w| {
-                    w.ep0datadone_ep0status().clear_bit()
-                });
+                regs.shorts
+                    .modify(|_, w| w.ep0datadone_ep0status().clear_bit());
             }
 
             // TODO: Check ISO EP
@@ -707,7 +733,7 @@ impl UsbBus for Usbd<'_> {
 
     fn force_reset(&self) -> usb_device::Result<()> {
         interrupt::free(|cs| {
-            let regs = self.periph.borrow(cs);
+            let regs = self.regs(cs);
             regs.usbpullup.write(|w| w.connect().disabled());
             // TODO delay needed?
             regs.usbpullup.write(|w| w.connect().enabled());
