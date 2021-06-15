@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, staging, trying ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: ${{ matrix.rust_version == 'nightly' }}
+  
+    strategy:
+      matrix:
+        include:
+        - rust_version: stable
+          target: thumbv7em-none-eabi
+          rustflags: --deny warnings
+        - rust_version: stable
+          target: thumbv7em-none-eabihf
+          rustflags: --deny warnings
+        - rust_version: stable
+          target: thumbv8m.main-none-eabi
+          rustflags: --deny warnings
+        - rust_version: beta
+          target: thumbv7em-none-eabihf
+        - rust_version: nightly
+          target: thumbv7em-none-eabihf
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: ${{ matrix.rust_version }}
+        target: ${{ matrix.target }}
+        profile: minimal
+        override: true
+    - name: Check
+      run: cargo check --target ${{ matrix.target }}
+      env:
+        RUSTFLAGS: ${{ matrix.rustflags }}
+
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Rust stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        components: rustfmt
+    - name: Check fmt
+      run: cargo fmt -- --check
+
+  ci:
+    if: ${{ success() }}
+    # all new jobs must be added to this list
+    needs: [build, fmt]
+    runs-on: ubuntu-latest
+    steps:
+      - name: CI succeeded
+        run: exit 0
