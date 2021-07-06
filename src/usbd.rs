@@ -57,7 +57,7 @@ struct EP0State {
 }
 
 /// USB device implementation.
-pub struct Usbd<'c, T: UsbPeripheral> {
+pub struct Usbd<T: UsbPeripheral> {
     _periph: Mutex<T>,
     // argument passed to `UsbDeviceBuilder.max_packet_size_0`
     max_packet_size_0: u16,
@@ -68,12 +68,9 @@ pub struct Usbd<'c, T: UsbPeripheral> {
     iso_out_used: bool,
     ep0_state: Mutex<Cell<EP0State>>,
     busy_in_endpoints: Mutex<Cell<u16>>,
-
-    // used to freeze `Clocks` and ensure they remain in the `ExternalOscillator` state
-    _clocks: &'c (),
 }
 
-impl<'c, T: UsbPeripheral> Usbd<'c, T> {
+impl<T: UsbPeripheral> Usbd<T> {
     /// Creates a new USB bus, taking ownership of the raw peripheral.
     ///
     /// # Parameters
@@ -96,7 +93,6 @@ impl<'c, T: UsbPeripheral> Usbd<'c, T> {
                 is_set_address: false,
             })),
             busy_in_endpoints: Mutex::new(Cell::new(0)),
-            _clocks: &(),
         })
     }
 
@@ -172,7 +168,7 @@ impl<'c, T: UsbPeripheral> Usbd<'c, T> {
     }
 }
 
-impl<T: UsbPeripheral> UsbBus for Usbd<'_, T> {
+impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     fn alloc_ep(
         &mut self,
         ep_dir: UsbDirection,
