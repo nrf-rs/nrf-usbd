@@ -42,8 +42,6 @@ impl Buffers {
     }
 }
 
-unsafe impl Sync for Buffers {}
-
 #[derive(Copy, Clone)]
 enum TransferState {
     NoTransfer,
@@ -733,10 +731,15 @@ impl<T: UsbPeripheral> UsbBus for Usbd<'_, T> {
 
     fn force_reset(&self) -> usb_device::Result<()> {
         interrupt::free(|cs| {
-            let regs = self.regs(cs);
-            regs.usbpullup.write(|w| w.connect().disabled());
-            // TODO delay needed?
-            regs.usbpullup.write(|w| w.connect().enabled());
+            self.regs(cs).usbpullup.write(|w| w.connect().disabled());
+        });
+
+        // Delay for 1ms, to give the host a chance to detect this.
+        // We run at 64 MHz, so 64k cycles are 1ms.
+        cortex_m::asm::delay(64_000);
+
+        interrupt::free(|cs| {
+            self.regs(cs).usbpullup.write(|w| w.connect().enabled());
         });
 
         Ok(())
