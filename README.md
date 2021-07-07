@@ -1,5 +1,4 @@
 [![crates.io](https://img.shields.io/crates/d/nrf-usbd.svg)](https://crates.io/crates/nrf-usbd)
-[![crates.io](https://img.shields.io/crates/v/nrf-usbd.svg)](https://crates.io/crates/nrf-usbd)
 ![Build Status](https://github.com/nrf-rs/nrf-usbd/workflows/CI/badge.svg)
 
 # `nrf-usbd`
