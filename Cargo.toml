@@ -8,7 +8,11 @@ members = [
 name = "nrf-usbd"
 version = "0.1.0"
 edition = "2018"
-
+description = "USB driver for nRF microcontrollers"
+license = "MIT OR Apache-2.0"
+keywords = ["nrf52", "nrf", "hal", "usb", "peripheral"]
+categories = ["embedded", "hardware-support", "no-std"]
+repository = "https://github.com/nrf-rs/nrf-usbd"
 
 [dependencies]
 cortex-m = "0.7.2"
