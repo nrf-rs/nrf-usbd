@@ -6,10 +6,11 @@
 //!   * Different events are used to initiate transfers.
 //!   * No notification when the status stage is ACK'd.
 
+use bare_metal::Mutex;
 use core::cell::Cell;
 use core::mem::MaybeUninit;
 use core::sync::atomic::{compiler_fence, Ordering};
-use cortex_m::interrupt::{self, CriticalSection, Mutex};
+use critical_section::CriticalSection;
 use usb_device::{
     bus::{PollResult, UsbBus, UsbBusAllocator},
     endpoint::{EndpointAddress, EndpointType},
@@ -244,8 +245,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
 
     #[inline]
     fn enable(&mut self) {
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
 
             errata::pre_enable();
 
@@ -264,8 +265,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
 
     #[inline]
     fn reset(&self) {
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
 
             // TODO: Initialize ISO buffers
 
@@ -310,8 +311,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
 
         // A 0-length write to Control EP 0 is a status stage acknowledging a control write xfer
         if ep_addr.index() == 0 && buf.is_empty() {
-            let exit = interrupt::free(|cs| {
-                let regs = self.regs(cs);
+            let exit = critical_section::with(move |cs| {
+                let regs = self.regs(&cs);
 
                 let ep0_state = self.ep0_state.borrow(cs).get();
 
@@ -349,8 +350,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
             return Err(UsbError::BufferOverflow);
         }
 
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
             let busy_in_endpoints = self.busy_in_endpoints.borrow(cs);
 
             if busy_in_endpoints.get() & (1 << i) != 0 {
@@ -462,8 +463,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
         }
 
         let i = ep_addr.index();
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
 
             // Control EP 0 is special
             if i == 0 {
@@ -551,8 +552,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     }
 
     fn set_stalled(&self, ep_addr: EndpointAddress, stalled: bool) {
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
 
             unsafe {
                 if ep_addr.index() == 0 {
@@ -578,8 +579,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     }
 
     fn is_stalled(&self, ep_addr: EndpointAddress) -> bool {
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
 
             let i = ep_addr.index();
             match ep_addr.direction() {
@@ -591,16 +592,16 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
 
     #[inline]
     fn suspend(&self) {
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
             regs.lowpower.write(|w| w.lowpower().low_power());
         });
     }
 
     #[inline]
     fn resume(&self) {
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
 
             errata::pre_wakeup();
 
@@ -609,8 +610,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     }
 
     fn poll(&self) -> PollResult {
-        interrupt::free(|cs| {
-            let regs = self.regs(cs);
+        critical_section::with(move |cs| {
+            let regs = self.regs(&cs);
             let busy_in_endpoints = self.busy_in_endpoints.borrow(cs);
 
             if regs.events_usbreset.read().events_usbreset().bit_is_set() {
@@ -726,16 +727,16 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     }
 
     fn force_reset(&self) -> usb_device::Result<()> {
-        interrupt::free(|cs| {
-            self.regs(cs).usbpullup.write(|w| w.connect().disabled());
+        critical_section::with(move |cs| {
+            self.regs(&cs).usbpullup.write(|w| w.connect().disabled());
         });
 
         // Delay for 1ms, to give the host a chance to detect this.
         // We run at 64 MHz, so 64k cycles are 1ms.
         cortex_m::asm::delay(64_000);
 
-        interrupt::free(|cs| {
-            self.regs(cs).usbpullup.write(|w| w.connect().enabled());
+        critical_section::with(move |cs| {
+            self.regs(&cs).usbpullup.write(|w| w.connect().enabled());
         });
 
         Ok(())
