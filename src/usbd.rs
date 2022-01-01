@@ -263,7 +263,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     }
 
     #[inline]
-    fn reset(&self) {
+    fn reset(&mut self) {
         interrupt::free(|cs| {
             let regs = self.regs(cs);
 
@@ -295,11 +295,11 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     }
 
     #[inline]
-    fn set_device_address(&self, _addr: u8) {
+    fn set_device_address(&mut self, _addr: u8) {
         // Nothing to do, the peripheral handles this.
     }
 
-    fn write(&self, ep_addr: EndpointAddress, buf: &[u8]) -> usb_device::Result<usize> {
+    fn write(&mut self, ep_addr: EndpointAddress, buf: &[u8]) -> usb_device::Result<usize> {
         if !self.is_used(ep_addr) {
             return Err(UsbError::InvalidEndpoint);
         }
@@ -452,7 +452,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
         })
     }
 
-    fn read(&self, ep_addr: EndpointAddress, buf: &mut [u8]) -> usb_device::Result<usize> {
+    fn read(&mut self, ep_addr: EndpointAddress, buf: &mut [u8]) -> usb_device::Result<usize> {
         if !self.is_used(ep_addr) {
             return Err(UsbError::InvalidEndpoint);
         }
@@ -550,7 +550,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
         })
     }
 
-    fn set_stalled(&self, ep_addr: EndpointAddress, stalled: bool) {
+    fn set_stalled(&mut self, ep_addr: EndpointAddress, stalled: bool) {
         interrupt::free(|cs| {
             let regs = self.regs(cs);
 
@@ -577,7 +577,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
         });
     }
 
-    fn is_stalled(&self, ep_addr: EndpointAddress) -> bool {
+    fn is_stalled(&mut self, ep_addr: EndpointAddress) -> bool {
         interrupt::free(|cs| {
             let regs = self.regs(cs);
 
@@ -590,7 +590,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     }
 
     #[inline]
-    fn suspend(&self) {
+    fn suspend(&mut self) {
         interrupt::free(|cs| {
             let regs = self.regs(cs);
             regs.lowpower.write(|w| w.lowpower().low_power());
@@ -598,7 +598,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
     }
 
     #[inline]
-    fn resume(&self) {
+    fn resume(&mut self) {
         interrupt::free(|cs| {
             let regs = self.regs(cs);
 
@@ -608,7 +608,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
         });
     }
 
-    fn poll(&self) -> PollResult {
+    fn poll(&mut self) -> PollResult {
         interrupt::free(|cs| {
             let regs = self.regs(cs);
             let busy_in_endpoints = self.busy_in_endpoints.borrow(cs);
@@ -725,7 +725,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
         })
     }
 
-    fn force_reset(&self) -> usb_device::Result<()> {
+    fn force_reset(&mut self) -> usb_device::Result<()> {
         interrupt::free(|cs| {
             self.regs(cs).usbpullup.write(|w| w.connect().disabled());
         });

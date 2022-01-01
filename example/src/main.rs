@@ -41,10 +41,10 @@ fn main() -> ! {
 
     info!("starting...");
 
-    let usb_bus = Usbd::new(Peripheral);
+    let mut usb_bus = Usbd::new(Peripheral);
 
-    let mut test = TestClass::new(&usb_bus);
-    let mut usb_dev = test.make_device(&usb_bus);
+    let mut test = TestClass::new(&mut usb_bus);
+    let mut usb_dev = test.make_device(usb_bus);
 
     info!("started!");
 
@@ -53,7 +53,7 @@ fn main() -> ! {
             continue;
         }
 
-        test.poll();
+        test.poll(usb_dev.bus_mut());
     }
 }
 
