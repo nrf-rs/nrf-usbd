@@ -5,6 +5,7 @@ use defmt_rtt as _;
 use nrf_usbd::{UsbPeripheral, Usbd};
 // global logger
 use panic_probe as _;
+use usb_device::test_class::TestClass;
 
 use core::str;
 use core::sync::atomic::{AtomicUsize, Ordering};
@@ -12,7 +13,7 @@ use cortex_m_rt::entry;
 use defmt::*;
 use nrf52840_pac as pac;
 use usb_device::device::{UsbDeviceBuilder, UsbVidPid};
-use usbd_serial::{SerialPort, USB_CLASS_CDC};
+//use usbd_serial::{SerialPort, USB_CLASS_CDC};
 
 defmt::timestamp! {"{=u64}", {
         static COUNT: AtomicUsize = AtomicUsize::new(0);
@@ -41,48 +42,18 @@ fn main() -> ! {
     info!("starting...");
 
     let usb_bus = Usbd::new(Peripheral);
-    let mut serial = SerialPort::new(&usb_bus);
 
-    let mut usb_dev = UsbDeviceBuilder::new(&usb_bus, UsbVidPid(0x16c0, 0x27dd))
-        .product("nRF52840 Serial Port Demo")
-        .device_class(USB_CLASS_CDC)
-        .max_packet_size_0(64) // (makes control transfers 8x faster)
-        .build();
+    let mut test = TestClass::new(&usb_bus);
+    let mut usb_dev = test.make_device(&usb_bus);
 
     info!("started!");
 
     loop {
-        if !usb_dev.poll(&mut [&mut serial]) {
+        if !usb_dev.poll(&mut [&mut test]) {
             continue;
         }
 
-        let mut buf = [0u8; 64];
-
-        match serial.read(&mut buf) {
-            Ok(count) if count > 0 => {
-                let mut buf = &mut buf[..count];
-
-                info!("read: {=str}", unsafe { str::from_utf8_unchecked(buf) });
-
-                // Echo back in upper case
-                for c in buf.iter_mut() {
-                    if 0x61 <= *c && *c <= 0x7a {
-                        *c &= !0x20;
-                    }
-                }
-
-                info!("writing: {=str}", unsafe { str::from_utf8_unchecked(buf) });
-                while !buf.is_empty() {
-                    match serial.write(buf) {
-                        Ok(len) => buf = &mut buf[len..],
-                        _ => {}
-                    }
-                }
-
-                info!("write done")
-            }
-            _ => {}
-        }
+        test.poll();
     }
 }
 

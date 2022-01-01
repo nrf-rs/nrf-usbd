@@ -25,9 +25,40 @@ cortex-m-rt = "0.7.1"
 
 nrf-usbd = { path = "../" }
 usb-device = "0.2.7"
-usbd-serial = "0.1.0"
+#usbd-serial = "0.1.0"
 nrf52840-pac = "0.10.1"
 
 [patch.crates-io]
 usb-device = { path = "../usb-device" }
-usbd-serial = { path = "../usbd-serial" }
+#usbd-serial = { path = "../usbd-serial" }
+
+
+[profile.dev]
+debug = 2
+debug-assertions = true
+opt-level = 's'
+overflow-checks = true
+
+[profile.release]
+codegen-units = 1
+debug = 2
+debug-assertions = false
+incremental = false
+lto = "fat"
+opt-level = 's'
+overflow-checks = false
+
+# do not optimize proc-macro crates = faster builds from scratch
+[profile.dev.build-override]
+codegen-units = 8
+debug = false
+debug-assertions = false
+opt-level = 0
+overflow-checks = false
+
+[profile.release.build-override]
+codegen-units = 8
+debug = false
+debug-assertions = false
+opt-level = 0
+overflow-checks = false
