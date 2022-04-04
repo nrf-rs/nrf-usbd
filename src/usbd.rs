@@ -752,7 +752,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
 /// Also need to activate the USBD interrupt in the NVIC. This is
 /// handled automatically if you are using RTIC with a hardware
 /// bound task.
-pub fn enable_usb_interrupts<T: UsbPeripheral>(usbd: &T) {
+pub fn enable_usb_interrupts<T: UsbPeripheral>(_usbd: &T) {
     let usbd = unsafe { &*(T::REGISTERS as *const RegisterBlock) };
 
     usbd.intenset.write(|w| {
@@ -791,7 +791,7 @@ pub fn enable_usb_interrupts<T: UsbPeripheral>(usbd: &T) {
 ///
 /// This only disables the events of the USBD peripheral, you will
 /// also need to deactivate the USBD interrupt in the NVIC.
-pub fn disable_usb_interrupts<T: UsbPeripheral>(usbd: &T) {
+pub fn disable_usb_interrupts<T: UsbPeripheral>(_usbd: &T) {
     let usbd = unsafe { &*(T::REGISTERS as *const RegisterBlock) };
 
     usbd.intenclr.write(|w| {
