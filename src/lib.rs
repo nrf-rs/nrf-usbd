@@ -6,7 +6,11 @@ mod errata;
 mod pac;
 mod usbd;
 
-pub use usbd::Usbd;
+pub use usbd::{
+    Usbd,
+    disable_usb_interrupts,
+    enable_usb_interrupts,
+};
 
 /// A trait for device-specific USB peripherals. Implement this to add support for a new hardware
 /// platform. Peripherals that have this trait must have the same register block as NRF52 USBD
