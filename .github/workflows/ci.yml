@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master, staging, trying ]
+    branches: [ main, staging, trying ]
   pull_request:
 
 jobs:
@@ -31,12 +31,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: ${{ matrix.rust_version }}
-        target: ${{ matrix.target }}
-        profile: minimal
-        override: true
+      run: |
+        rustup install --profile=minimal ${{ matrix.rust_version }}
+        rustup target add ${{ matrix.target }}
     - name: Check
       run: cargo check --target ${{ matrix.target }}
       env:
@@ -47,11 +44,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install Rust stable
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
-        components: rustfmt
+      run: |
+        rustup install --profile=minimal stable
+        rustup component add rustfmt
     - name: Check fmt
       run: cargo fmt -- --check
 
