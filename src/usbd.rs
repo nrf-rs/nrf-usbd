@@ -11,7 +11,7 @@ use core::mem::MaybeUninit;
 use core::sync::atomic::{compiler_fence, Ordering};
 use critical_section::{CriticalSection, Mutex};
 use usb_device::{
-    bus::{PollResult, UsbBus, UsbBusAllocator},
+    bus::{PollResult, UsbBus},
     endpoint::{EndpointAddress, EndpointType},
     UsbDirection, UsbError,
 };
@@ -57,6 +57,11 @@ struct EP0State {
 }
 
 /// USB device implementation.
+///
+/// This type implements the [`UsbBus`] trait and can be passed to a [`UsbBusAllocator`] to
+/// configure and use the USB device.
+///
+/// [`UsbBusAllocator`]: usb_device::bus::UsbBusAllocator
 pub struct Usbd<T: UsbPeripheral> {
     _periph: Mutex<T>,
     // argument passed to `UsbDeviceBuilder.max_packet_size_0`
@@ -71,14 +76,14 @@ pub struct Usbd<T: UsbPeripheral> {
 }
 
 impl<T: UsbPeripheral> Usbd<T> {
-    /// Creates a new USB bus, taking ownership of the raw peripheral.
+    /// Creates a new USB device wrapper, taking ownership of the raw peripheral.
     ///
     /// # Parameters
     ///
     /// * `periph`: The raw USBD peripheral.
     #[inline]
-    pub fn new(periph: T) -> UsbBusAllocator<Self> {
-        UsbBusAllocator::new(Self {
+    pub fn new(periph: T) -> Self {
+        Self {
             _periph: Mutex::new(periph),
             max_packet_size_0: 0,
             bufs: Buffers::new(),
@@ -93,7 +98,7 @@ impl<T: UsbPeripheral> Usbd<T> {
                 is_set_address: false,
             })),
             busy_in_endpoints: Mutex::new(Cell::new(0)),
-        })
+        }
     }
 
     fn regs<'a>(&self, _cs: &'a CriticalSection) -> &'a RegisterBlock {

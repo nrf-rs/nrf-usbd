@@ -1,8 +1,6 @@
 [workspace]
-members = [
-    ".",
-    "example",
-]
+members = [".", "example"]
+default-members = [".", "example"]
 
 [package]
 name = "nrf-usbd"

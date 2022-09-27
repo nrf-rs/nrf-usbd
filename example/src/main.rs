@@ -5,6 +5,7 @@ use defmt_rtt as _;
 use nrf_usbd::{UsbPeripheral, Usbd};
 // global logger
 use panic_probe as _;
+use usb_device::class_prelude::UsbBusAllocator;
 
 use core::str;
 use core::sync::atomic::{AtomicUsize, Ordering};
@@ -40,7 +41,7 @@ fn main() -> ! {
 
     info!("starting...");
 
-    let usb_bus = Usbd::new(Peripheral);
+    let usb_bus = UsbBusAllocator::new(Usbd::new(Peripheral));
     let mut serial = SerialPort::new(&usb_bus);
 
     let mut usb_dev = UsbDeviceBuilder::new(&usb_bus, UsbVidPid(0x16c0, 0x27dd))
