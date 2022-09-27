@@ -6,11 +6,10 @@
 //!   * Different events are used to initiate transfers.
 //!   * No notification when the status stage is ACK'd.
 
-use bare_metal::Mutex;
 use core::cell::Cell;
 use core::mem::MaybeUninit;
 use core::sync::atomic::{compiler_fence, Ordering};
-use critical_section::CriticalSection;
+use critical_section::{CriticalSection, Mutex};
 use usb_device::{
     bus::{PollResult, UsbBus, UsbBusAllocator},
     endpoint::{EndpointAddress, EndpointType},
