@@ -14,7 +14,7 @@ repository = "https://github.com/nrf-rs/nrf-usbd"
 
 [dependencies]
 cortex-m = "0.7.2"
-usb-device = "0.2.8"
+usb-device = "0.3.0"
 vcell = "0.1.3"
 critical-section = "1.0.0"
 
