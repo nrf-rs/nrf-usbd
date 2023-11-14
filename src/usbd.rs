@@ -206,7 +206,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
         };
 
         let alloc_index = match ep_type {
-            EndpointType::Isochronous => {
+            EndpointType::Isochronous { .. } => {
                 let flag = match ep_dir {
                     UsbDirection::In => &mut self.iso_in_used,
                     UsbDirection::Out => &mut self.iso_out_used,

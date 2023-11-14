@@ -24,6 +24,6 @@ cortex-m = "0.7.2"
 cortex-m-rt = "0.6.12"
 
 nrf-usbd = { path = "../" }
-usb-device = "0.2.7"
-usbd-serial = "0.1.0"
+usb-device = "0.3.0"
+usbd-serial = "0.2.0"
 nrf52840-pac = "0.9.0"
