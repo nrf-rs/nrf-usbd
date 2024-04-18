@@ -12,7 +12,7 @@ use core::sync::atomic::{AtomicUsize, Ordering};
 use cortex_m_rt::entry;
 use defmt::*;
 use nrf52840_pac as pac;
-use usb_device::device::{UsbDeviceBuilder, UsbVidPid};
+use usb_device::device::{StringDescriptors, UsbDeviceBuilder, UsbVidPid};
 use usbd_serial::{SerialPort, USB_CLASS_CDC};
 
 defmt::timestamp! {"{=u64}", {
@@ -45,9 +45,13 @@ fn main() -> ! {
     let mut serial = SerialPort::new(&usb_bus);
 
     let mut usb_dev = UsbDeviceBuilder::new(&usb_bus, UsbVidPid(0x16c0, 0x27dd))
-        .product("nRF52840 Serial Port Demo")
+        .strings(&[
+            StringDescriptors::new(usb_device::LangID::EN).product("nRF52840 Serial Port Demo")
+        ])
+        .unwrap()
         .device_class(USB_CLASS_CDC)
         .max_packet_size_0(64) // (makes control transfers 8x faster)
+        .unwrap()
         .build();
 
     info!("started!");
