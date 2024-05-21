@@ -34,8 +34,8 @@ jobs:
       run: |
         rustup install --profile=minimal ${{ matrix.rust_version }}
         rustup target add ${{ matrix.target }}
-    - name: Check
-      run: cargo check --target ${{ matrix.target }}
+    - name: Build
+      run: cargo build --target ${{ matrix.target }}
       env:
         RUSTFLAGS: ${{ matrix.rustflags }}
 
