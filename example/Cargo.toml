@@ -20,7 +20,7 @@ panic-probe = { version = "0.2.0", features = ["print-defmt"] }
 defmt = "0.2.0"
 defmt-rtt = "0.2.0"
 
-cortex-m = "0.7.2"
+cortex-m = {version = "0.7.2", features = ["critical-section-single-core"] }
 cortex-m-rt = "0.6.12"
 
 nrf-usbd = { path = "../" }
