@@ -39,6 +39,15 @@ jobs:
       env:
         RUSTFLAGS: ${{ matrix.rustflags }}
 
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Rust
+        run: rustup target add thumbv7em-none-eabi
+      - name: Build example
+        run: cd example && cargo build
+
   fmt:
     runs-on: ubuntu-latest
     steps:
