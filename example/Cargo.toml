@@ -17,7 +17,7 @@ defmt-error = []
 
 [dependencies]
 panic-probe = { version = "0.3.2", features = ["print-defmt"] }
-defmt = "0.3.8"
+defmt = "1.0.1"
 defmt-rtt = "0.4.1"
 
 cortex-m = {version = "0.7.7", features = ["critical-section-single-core"] }
