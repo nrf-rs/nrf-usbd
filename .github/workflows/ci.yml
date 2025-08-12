@@ -29,7 +29,7 @@ jobs:
           target: thumbv7em-none-eabihf
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install Rust
       run: |
         rustup install --profile=minimal ${{ matrix.rust_version }}
@@ -42,7 +42,7 @@ jobs:
   example:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Rust
         run: rustup target add thumbv7em-none-eabi
       - name: Build example
@@ -51,7 +51,7 @@ jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Install Rust stable
       run: |
         rustup install --profile=minimal stable
