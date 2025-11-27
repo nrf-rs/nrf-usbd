@@ -650,6 +650,7 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
                         // reset the state
                         state.in_transfer_state = TransferState::NoTransfer;
                         ep0_state.set(state);
+                        busy_in_endpoints.update(|x| x & !1);
                     }
                 }
             }
