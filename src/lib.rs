@@ -1,6 +1,7 @@
 //! USB peripheral driver for nRF microcontrollers.
 
 #![no_std]
+#![allow(mismatched_lifetime_syntaxes)] // TODO: Remove in follow-up PR.
 
 mod errata;
 mod pac;
