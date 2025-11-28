@@ -99,7 +99,7 @@ impl R {
 impl W {
     #[doc = "Bits 0:4 - State D+ and D- lines will be forced into by the DPDMDRIVE task"]
     #[inline(always)]
-    pub fn state(&mut self) -> STATE_W {
+    pub fn state(&mut self) -> STATE_W<'_> {
         STATE_W { w: self }
     }
 }

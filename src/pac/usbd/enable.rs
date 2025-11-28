@@ -95,7 +95,7 @@ impl R {
 impl W {
     #[doc = "Bit 0 - Enable USB"]
     #[inline(always)]
-    pub fn enable(&mut self) -> ENABLE_W {
+    pub fn enable(&mut self) -> ENABLE_W<'_> {
         ENABLE_W { w: self }
     }
 }

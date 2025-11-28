@@ -33,7 +33,7 @@ impl<'a> TASKS_DPDMDRIVE_W<'a> {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn tasks_dpdmdrive(&mut self) -> TASKS_DPDMDRIVE_W {
+    pub fn tasks_dpdmdrive(&mut self) -> TASKS_DPDMDRIVE_W<'_> {
         TASKS_DPDMDRIVE_W { w: self }
     }
 }

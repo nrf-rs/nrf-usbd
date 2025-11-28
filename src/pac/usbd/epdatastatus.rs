@@ -1135,72 +1135,72 @@ impl R {
 impl W {
     #[doc = "Bit 1 - Acknowledged data transfer on this IN endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin1(&mut self) -> EPIN1_W {
+    pub fn epin1(&mut self) -> EPIN1_W<'_> {
         EPIN1_W { w: self }
     }
     #[doc = "Bit 2 - Acknowledged data transfer on this IN endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin2(&mut self) -> EPIN2_W {
+    pub fn epin2(&mut self) -> EPIN2_W<'_> {
         EPIN2_W { w: self }
     }
     #[doc = "Bit 3 - Acknowledged data transfer on this IN endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin3(&mut self) -> EPIN3_W {
+    pub fn epin3(&mut self) -> EPIN3_W<'_> {
         EPIN3_W { w: self }
     }
     #[doc = "Bit 4 - Acknowledged data transfer on this IN endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin4(&mut self) -> EPIN4_W {
+    pub fn epin4(&mut self) -> EPIN4_W<'_> {
         EPIN4_W { w: self }
     }
     #[doc = "Bit 5 - Acknowledged data transfer on this IN endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin5(&mut self) -> EPIN5_W {
+    pub fn epin5(&mut self) -> EPIN5_W<'_> {
         EPIN5_W { w: self }
     }
     #[doc = "Bit 6 - Acknowledged data transfer on this IN endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin6(&mut self) -> EPIN6_W {
+    pub fn epin6(&mut self) -> EPIN6_W<'_> {
         EPIN6_W { w: self }
     }
     #[doc = "Bit 7 - Acknowledged data transfer on this IN endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin7(&mut self) -> EPIN7_W {
+    pub fn epin7(&mut self) -> EPIN7_W<'_> {
         EPIN7_W { w: self }
     }
     #[doc = "Bit 17 - Acknowledged data transfer on this OUT endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout1(&mut self) -> EPOUT1_W {
+    pub fn epout1(&mut self) -> EPOUT1_W<'_> {
         EPOUT1_W { w: self }
     }
     #[doc = "Bit 18 - Acknowledged data transfer on this OUT endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout2(&mut self) -> EPOUT2_W {
+    pub fn epout2(&mut self) -> EPOUT2_W<'_> {
         EPOUT2_W { w: self }
     }
     #[doc = "Bit 19 - Acknowledged data transfer on this OUT endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout3(&mut self) -> EPOUT3_W {
+    pub fn epout3(&mut self) -> EPOUT3_W<'_> {
         EPOUT3_W { w: self }
     }
     #[doc = "Bit 20 - Acknowledged data transfer on this OUT endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout4(&mut self) -> EPOUT4_W {
+    pub fn epout4(&mut self) -> EPOUT4_W<'_> {
         EPOUT4_W { w: self }
     }
     #[doc = "Bit 21 - Acknowledged data transfer on this OUT endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout5(&mut self) -> EPOUT5_W {
+    pub fn epout5(&mut self) -> EPOUT5_W<'_> {
         EPOUT5_W { w: self }
     }
     #[doc = "Bit 22 - Acknowledged data transfer on this OUT endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout6(&mut self) -> EPOUT6_W {
+    pub fn epout6(&mut self) -> EPOUT6_W<'_> {
         EPOUT6_W { w: self }
     }
     #[doc = "Bit 23 - Acknowledged data transfer on this OUT endpoint. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout7(&mut self) -> EPOUT7_W {
+    pub fn epout7(&mut self) -> EPOUT7_W<'_> {
         EPOUT7_W { w: self }
     }
 }

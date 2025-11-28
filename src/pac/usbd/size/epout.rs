@@ -35,7 +35,7 @@ impl R {
 impl W {
     #[doc = "Bits 0:6 - Number of bytes received last in the data stage of this OUT endpoint"]
     #[inline(always)]
-    pub fn size(&mut self) -> SIZE_W {
+    pub fn size(&mut self) -> SIZE_W<'_> {
         SIZE_W { w: self }
     }
 }

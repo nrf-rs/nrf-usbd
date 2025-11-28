@@ -1455,92 +1455,92 @@ impl R {
 impl W {
     #[doc = "Bit 0 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin0(&mut self) -> EPIN0_W {
+    pub fn epin0(&mut self) -> EPIN0_W<'_> {
         EPIN0_W { w: self }
     }
     #[doc = "Bit 1 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin1(&mut self) -> EPIN1_W {
+    pub fn epin1(&mut self) -> EPIN1_W<'_> {
         EPIN1_W { w: self }
     }
     #[doc = "Bit 2 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin2(&mut self) -> EPIN2_W {
+    pub fn epin2(&mut self) -> EPIN2_W<'_> {
         EPIN2_W { w: self }
     }
     #[doc = "Bit 3 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin3(&mut self) -> EPIN3_W {
+    pub fn epin3(&mut self) -> EPIN3_W<'_> {
         EPIN3_W { w: self }
     }
     #[doc = "Bit 4 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin4(&mut self) -> EPIN4_W {
+    pub fn epin4(&mut self) -> EPIN4_W<'_> {
         EPIN4_W { w: self }
     }
     #[doc = "Bit 5 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin5(&mut self) -> EPIN5_W {
+    pub fn epin5(&mut self) -> EPIN5_W<'_> {
         EPIN5_W { w: self }
     }
     #[doc = "Bit 6 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin6(&mut self) -> EPIN6_W {
+    pub fn epin6(&mut self) -> EPIN6_W<'_> {
         EPIN6_W { w: self }
     }
     #[doc = "Bit 7 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin7(&mut self) -> EPIN7_W {
+    pub fn epin7(&mut self) -> EPIN7_W<'_> {
         EPIN7_W { w: self }
     }
     #[doc = "Bit 8 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epin8(&mut self) -> EPIN8_W {
+    pub fn epin8(&mut self) -> EPIN8_W<'_> {
         EPIN8_W { w: self }
     }
     #[doc = "Bit 16 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout0(&mut self) -> EPOUT0_W {
+    pub fn epout0(&mut self) -> EPOUT0_W<'_> {
         EPOUT0_W { w: self }
     }
     #[doc = "Bit 17 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout1(&mut self) -> EPOUT1_W {
+    pub fn epout1(&mut self) -> EPOUT1_W<'_> {
         EPOUT1_W { w: self }
     }
     #[doc = "Bit 18 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout2(&mut self) -> EPOUT2_W {
+    pub fn epout2(&mut self) -> EPOUT2_W<'_> {
         EPOUT2_W { w: self }
     }
     #[doc = "Bit 19 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout3(&mut self) -> EPOUT3_W {
+    pub fn epout3(&mut self) -> EPOUT3_W<'_> {
         EPOUT3_W { w: self }
     }
     #[doc = "Bit 20 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout4(&mut self) -> EPOUT4_W {
+    pub fn epout4(&mut self) -> EPOUT4_W<'_> {
         EPOUT4_W { w: self }
     }
     #[doc = "Bit 21 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout5(&mut self) -> EPOUT5_W {
+    pub fn epout5(&mut self) -> EPOUT5_W<'_> {
         EPOUT5_W { w: self }
     }
     #[doc = "Bit 22 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout6(&mut self) -> EPOUT6_W {
+    pub fn epout6(&mut self) -> EPOUT6_W<'_> {
         EPOUT6_W { w: self }
     }
     #[doc = "Bit 23 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout7(&mut self) -> EPOUT7_W {
+    pub fn epout7(&mut self) -> EPOUT7_W<'_> {
         EPOUT7_W { w: self }
     }
     #[doc = "Bit 24 - Captured state of endpoint's EasyDMA registers. Write '1' to clear."]
     #[inline(always)]
-    pub fn epout8(&mut self) -> EPOUT8_W {
+    pub fn epout8(&mut self) -> EPOUT8_W<'_> {
         EPOUT8_W { w: self }
     }
 }

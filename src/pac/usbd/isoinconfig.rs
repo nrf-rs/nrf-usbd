@@ -95,7 +95,7 @@ impl R {
 impl W {
     #[doc = "Bit 0 - Controls the response of the ISO IN endpoint to an IN token when no data is ready to be sent"]
     #[inline(always)]
-    pub fn response(&mut self) -> RESPONSE_W {
+    pub fn response(&mut self) -> RESPONSE_W<'_> {
         RESPONSE_W { w: self }
     }
 }

@@ -95,7 +95,7 @@ impl R {
 impl W {
     #[doc = "Bit 0 - Controls USBD peripheral low-power mode during USB suspend"]
     #[inline(always)]
-    pub fn lowpower(&mut self) -> LOWPOWER_W {
+    pub fn lowpower(&mut self) -> LOWPOWER_W<'_> {
         LOWPOWER_W { w: self }
     }
 }

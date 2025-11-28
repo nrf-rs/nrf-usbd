@@ -95,7 +95,7 @@ impl R {
 impl W {
     #[doc = "Bit 0 - Control of the USB pull-up on the D+ line"]
     #[inline(always)]
-    pub fn connect(&mut self) -> CONNECT_W {
+    pub fn connect(&mut self) -> CONNECT_W<'_> {
         CONNECT_W { w: self }
     }
 }

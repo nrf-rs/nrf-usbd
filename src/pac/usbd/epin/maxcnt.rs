@@ -34,7 +34,7 @@ impl R {
 impl W {
     #[doc = "Bits 0:6 - Maximum number of bytes to transfer"]
     #[inline(always)]
-    pub fn maxcnt(&mut self) -> MAXCNT_W {
+    pub fn maxcnt(&mut self) -> MAXCNT_W<'_> {
         MAXCNT_W { w: self }
     }
 }

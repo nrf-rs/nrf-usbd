@@ -44,7 +44,7 @@ impl R {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn events_sof(&mut self) -> EVENTS_SOF_W {
+    pub fn events_sof(&mut self) -> EVENTS_SOF_W<'_> {
         EVENTS_SOF_W { w: self }
     }
 }

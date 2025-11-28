@@ -44,7 +44,7 @@ impl R {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn events_epdata(&mut self) -> EVENTS_EPDATA_W {
+    pub fn events_epdata(&mut self) -> EVENTS_EPDATA_W<'_> {
         EVENTS_EPDATA_W { w: self }
     }
 }
