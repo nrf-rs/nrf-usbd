@@ -198,17 +198,17 @@ impl R {
 impl W {
     #[doc = "Bits 0:2 - Select bulk endpoint number"]
     #[inline(always)]
-    pub fn ep(&mut self) -> EP_W {
+    pub fn ep(&mut self) -> EP_W<'_> {
         EP_W { w: self }
     }
     #[doc = "Bit 7 - Selects IN or OUT endpoint"]
     #[inline(always)]
-    pub fn io(&mut self) -> IO_W {
+    pub fn io(&mut self) -> IO_W<'_> {
         IO_W { w: self }
     }
     #[doc = "Bits 8:9 - Data toggle value"]
     #[inline(always)]
-    pub fn value(&mut self) -> VALUE_W {
+    pub fn value(&mut self) -> VALUE_W<'_> {
         VALUE_W { w: self }
     }
 }

@@ -2238,143 +2238,143 @@ event"]
 impl W {
     #[doc = "Bit 0 - Write '1' to disable interrupt for USBRESET event"]
     #[inline(always)]
-    pub fn usbreset(&mut self) -> USBRESET_W {
+    pub fn usbreset(&mut self) -> USBRESET_W<'_> {
         USBRESET_W { w: self }
     }
     #[doc = "Bit 1 - Write '1' to disable interrupt for STARTED event"]
     #[inline(always)]
-    pub fn started(&mut self) -> STARTED_W {
+    pub fn started(&mut self) -> STARTED_W<'_> {
         STARTED_W { w: self }
     }
     #[doc = "Bit 2 - Write '1' to disable interrupt for ENDEPIN\\[0\\]
 event"]
     #[inline(always)]
-    pub fn endepin0(&mut self) -> ENDEPIN0_W {
+    pub fn endepin0(&mut self) -> ENDEPIN0_W<'_> {
         ENDEPIN0_W { w: self }
     }
     #[doc = "Bit 3 - Write '1' to disable interrupt for ENDEPIN\\[1\\]
 event"]
     #[inline(always)]
-    pub fn endepin1(&mut self) -> ENDEPIN1_W {
+    pub fn endepin1(&mut self) -> ENDEPIN1_W<'_> {
         ENDEPIN1_W { w: self }
     }
     #[doc = "Bit 4 - Write '1' to disable interrupt for ENDEPIN\\[2\\]
 event"]
     #[inline(always)]
-    pub fn endepin2(&mut self) -> ENDEPIN2_W {
+    pub fn endepin2(&mut self) -> ENDEPIN2_W<'_> {
         ENDEPIN2_W { w: self }
     }
     #[doc = "Bit 5 - Write '1' to disable interrupt for ENDEPIN\\[3\\]
 event"]
     #[inline(always)]
-    pub fn endepin3(&mut self) -> ENDEPIN3_W {
+    pub fn endepin3(&mut self) -> ENDEPIN3_W<'_> {
         ENDEPIN3_W { w: self }
     }
     #[doc = "Bit 6 - Write '1' to disable interrupt for ENDEPIN\\[4\\]
 event"]
     #[inline(always)]
-    pub fn endepin4(&mut self) -> ENDEPIN4_W {
+    pub fn endepin4(&mut self) -> ENDEPIN4_W<'_> {
         ENDEPIN4_W { w: self }
     }
     #[doc = "Bit 7 - Write '1' to disable interrupt for ENDEPIN\\[5\\]
 event"]
     #[inline(always)]
-    pub fn endepin5(&mut self) -> ENDEPIN5_W {
+    pub fn endepin5(&mut self) -> ENDEPIN5_W<'_> {
         ENDEPIN5_W { w: self }
     }
     #[doc = "Bit 8 - Write '1' to disable interrupt for ENDEPIN\\[6\\]
 event"]
     #[inline(always)]
-    pub fn endepin6(&mut self) -> ENDEPIN6_W {
+    pub fn endepin6(&mut self) -> ENDEPIN6_W<'_> {
         ENDEPIN6_W { w: self }
     }
     #[doc = "Bit 9 - Write '1' to disable interrupt for ENDEPIN\\[7\\]
 event"]
     #[inline(always)]
-    pub fn endepin7(&mut self) -> ENDEPIN7_W {
+    pub fn endepin7(&mut self) -> ENDEPIN7_W<'_> {
         ENDEPIN7_W { w: self }
     }
     #[doc = "Bit 10 - Write '1' to disable interrupt for EP0DATADONE event"]
     #[inline(always)]
-    pub fn ep0datadone(&mut self) -> EP0DATADONE_W {
+    pub fn ep0datadone(&mut self) -> EP0DATADONE_W<'_> {
         EP0DATADONE_W { w: self }
     }
     #[doc = "Bit 11 - Write '1' to disable interrupt for ENDISOIN event"]
     #[inline(always)]
-    pub fn endisoin(&mut self) -> ENDISOIN_W {
+    pub fn endisoin(&mut self) -> ENDISOIN_W<'_> {
         ENDISOIN_W { w: self }
     }
     #[doc = "Bit 12 - Write '1' to disable interrupt for ENDEPOUT\\[0\\]
 event"]
     #[inline(always)]
-    pub fn endepout0(&mut self) -> ENDEPOUT0_W {
+    pub fn endepout0(&mut self) -> ENDEPOUT0_W<'_> {
         ENDEPOUT0_W { w: self }
     }
     #[doc = "Bit 13 - Write '1' to disable interrupt for ENDEPOUT\\[1\\]
 event"]
     #[inline(always)]
-    pub fn endepout1(&mut self) -> ENDEPOUT1_W {
+    pub fn endepout1(&mut self) -> ENDEPOUT1_W<'_> {
         ENDEPOUT1_W { w: self }
     }
     #[doc = "Bit 14 - Write '1' to disable interrupt for ENDEPOUT\\[2\\]
 event"]
     #[inline(always)]
-    pub fn endepout2(&mut self) -> ENDEPOUT2_W {
+    pub fn endepout2(&mut self) -> ENDEPOUT2_W<'_> {
         ENDEPOUT2_W { w: self }
     }
     #[doc = "Bit 15 - Write '1' to disable interrupt for ENDEPOUT\\[3\\]
 event"]
     #[inline(always)]
-    pub fn endepout3(&mut self) -> ENDEPOUT3_W {
+    pub fn endepout3(&mut self) -> ENDEPOUT3_W<'_> {
         ENDEPOUT3_W { w: self }
     }
     #[doc = "Bit 16 - Write '1' to disable interrupt for ENDEPOUT\\[4\\]
 event"]
     #[inline(always)]
-    pub fn endepout4(&mut self) -> ENDEPOUT4_W {
+    pub fn endepout4(&mut self) -> ENDEPOUT4_W<'_> {
         ENDEPOUT4_W { w: self }
     }
     #[doc = "Bit 17 - Write '1' to disable interrupt for ENDEPOUT\\[5\\]
 event"]
     #[inline(always)]
-    pub fn endepout5(&mut self) -> ENDEPOUT5_W {
+    pub fn endepout5(&mut self) -> ENDEPOUT5_W<'_> {
         ENDEPOUT5_W { w: self }
     }
     #[doc = "Bit 18 - Write '1' to disable interrupt for ENDEPOUT\\[6\\]
 event"]
     #[inline(always)]
-    pub fn endepout6(&mut self) -> ENDEPOUT6_W {
+    pub fn endepout6(&mut self) -> ENDEPOUT6_W<'_> {
         ENDEPOUT6_W { w: self }
     }
     #[doc = "Bit 19 - Write '1' to disable interrupt for ENDEPOUT\\[7\\]
 event"]
     #[inline(always)]
-    pub fn endepout7(&mut self) -> ENDEPOUT7_W {
+    pub fn endepout7(&mut self) -> ENDEPOUT7_W<'_> {
         ENDEPOUT7_W { w: self }
     }
     #[doc = "Bit 20 - Write '1' to disable interrupt for ENDISOOUT event"]
     #[inline(always)]
-    pub fn endisoout(&mut self) -> ENDISOOUT_W {
+    pub fn endisoout(&mut self) -> ENDISOOUT_W<'_> {
         ENDISOOUT_W { w: self }
     }
     #[doc = "Bit 21 - Write '1' to disable interrupt for SOF event"]
     #[inline(always)]
-    pub fn sof(&mut self) -> SOF_W {
+    pub fn sof(&mut self) -> SOF_W<'_> {
         SOF_W { w: self }
     }
     #[doc = "Bit 22 - Write '1' to disable interrupt for USBEVENT event"]
     #[inline(always)]
-    pub fn usbevent(&mut self) -> USBEVENT_W {
+    pub fn usbevent(&mut self) -> USBEVENT_W<'_> {
         USBEVENT_W { w: self }
     }
     #[doc = "Bit 23 - Write '1' to disable interrupt for EP0SETUP event"]
     #[inline(always)]
-    pub fn ep0setup(&mut self) -> EP0SETUP_W {
+    pub fn ep0setup(&mut self) -> EP0SETUP_W<'_> {
         EP0SETUP_W { w: self }
     }
     #[doc = "Bit 24 - Write '1' to disable interrupt for EPDATA event"]
     #[inline(always)]
-    pub fn epdata(&mut self) -> EPDATA_W {
+    pub fn epdata(&mut self) -> EPDATA_W<'_> {
         EPDATA_W { w: self }
     }
 }

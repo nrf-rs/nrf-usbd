@@ -735,47 +735,47 @@ impl R {
 impl W {
     #[doc = "Bit 0 - Enable OUT endpoint 0"]
     #[inline(always)]
-    pub fn out0(&mut self) -> OUT0_W {
+    pub fn out0(&mut self) -> OUT0_W<'_> {
         OUT0_W { w: self }
     }
     #[doc = "Bit 1 - Enable OUT endpoint 1"]
     #[inline(always)]
-    pub fn out1(&mut self) -> OUT1_W {
+    pub fn out1(&mut self) -> OUT1_W<'_> {
         OUT1_W { w: self }
     }
     #[doc = "Bit 2 - Enable OUT endpoint 2"]
     #[inline(always)]
-    pub fn out2(&mut self) -> OUT2_W {
+    pub fn out2(&mut self) -> OUT2_W<'_> {
         OUT2_W { w: self }
     }
     #[doc = "Bit 3 - Enable OUT endpoint 3"]
     #[inline(always)]
-    pub fn out3(&mut self) -> OUT3_W {
+    pub fn out3(&mut self) -> OUT3_W<'_> {
         OUT3_W { w: self }
     }
     #[doc = "Bit 4 - Enable OUT endpoint 4"]
     #[inline(always)]
-    pub fn out4(&mut self) -> OUT4_W {
+    pub fn out4(&mut self) -> OUT4_W<'_> {
         OUT4_W { w: self }
     }
     #[doc = "Bit 5 - Enable OUT endpoint 5"]
     #[inline(always)]
-    pub fn out5(&mut self) -> OUT5_W {
+    pub fn out5(&mut self) -> OUT5_W<'_> {
         OUT5_W { w: self }
     }
     #[doc = "Bit 6 - Enable OUT endpoint 6"]
     #[inline(always)]
-    pub fn out6(&mut self) -> OUT6_W {
+    pub fn out6(&mut self) -> OUT6_W<'_> {
         OUT6_W { w: self }
     }
     #[doc = "Bit 7 - Enable OUT endpoint 7"]
     #[inline(always)]
-    pub fn out7(&mut self) -> OUT7_W {
+    pub fn out7(&mut self) -> OUT7_W<'_> {
         OUT7_W { w: self }
     }
     #[doc = "Bit 8 - Enable ISO OUT endpoint 8"]
     #[inline(always)]
-    pub fn isoout(&mut self) -> ISOOUT_W {
+    pub fn isoout(&mut self) -> ISOOUT_W<'_> {
         ISOOUT_W { w: self }
     }
 }

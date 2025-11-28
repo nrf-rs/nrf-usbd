@@ -34,7 +34,7 @@ impl R {
 impl W {
     #[doc = "Bits 0:31 - Data pointer. Accepts any address in Data RAM."]
     #[inline(always)]
-    pub fn ptr(&mut self) -> PTR_W {
+    pub fn ptr(&mut self) -> PTR_W<'_> {
         PTR_W { w: self }
     }
 }

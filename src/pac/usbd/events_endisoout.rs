@@ -44,7 +44,7 @@ impl R {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn events_endisoout(&mut self) -> EVENTS_ENDISOOUT_W {
+    pub fn events_endisoout(&mut self) -> EVENTS_ENDISOOUT_W<'_> {
         EVENTS_ENDISOOUT_W { w: self }
     }
 }

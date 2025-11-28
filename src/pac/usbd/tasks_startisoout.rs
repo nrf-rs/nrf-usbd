@@ -33,7 +33,7 @@ impl<'a> TASKS_STARTISOOUT_W<'a> {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn tasks_startisoout(&mut self) -> TASKS_STARTISOOUT_W {
+    pub fn tasks_startisoout(&mut self) -> TASKS_STARTISOOUT_W<'_> {
         TASKS_STARTISOOUT_W { w: self }
     }
 }

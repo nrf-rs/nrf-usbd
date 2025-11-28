@@ -415,27 +415,27 @@ impl R {
 impl W {
     #[doc = "Bit 0 - CRC error was detected on isochronous OUT endpoint 8. Write '1' to clear."]
     #[inline(always)]
-    pub fn isooutcrc(&mut self) -> ISOOUTCRC_W {
+    pub fn isooutcrc(&mut self) -> ISOOUTCRC_W<'_> {
         ISOOUTCRC_W { w: self }
     }
     #[doc = "Bit 8 - Signals that USB lines have been idle long enough for the device to enter suspend. Write '1' to clear."]
     #[inline(always)]
-    pub fn suspend(&mut self) -> SUSPEND_W {
+    pub fn suspend(&mut self) -> SUSPEND_W<'_> {
         SUSPEND_W { w: self }
     }
     #[doc = "Bit 9 - Signals that a RESUME condition (K state or activity restart) has been detected on USB lines. Write '1' to clear."]
     #[inline(always)]
-    pub fn resume(&mut self) -> RESUME_W {
+    pub fn resume(&mut self) -> RESUME_W<'_> {
         RESUME_W { w: self }
     }
     #[doc = "Bit 10 - USB MAC has been woken up and operational. Write '1' to clear."]
     #[inline(always)]
-    pub fn usbwuallowed(&mut self) -> USBWUALLOWED_W {
+    pub fn usbwuallowed(&mut self) -> USBWUALLOWED_W<'_> {
         USBWUALLOWED_W { w: self }
     }
     #[doc = "Bit 11 - USB device is ready for normal operation. Write '1' to clear."]
     #[inline(always)]
-    pub fn ready(&mut self) -> READY_W {
+    pub fn ready(&mut self) -> READY_W<'_> {
         READY_W { w: self }
     }
 }

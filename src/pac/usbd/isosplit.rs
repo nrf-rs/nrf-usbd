@@ -86,7 +86,7 @@ impl R {
 impl W {
     #[doc = "Bits 0:15 - Controls the split of ISO buffers"]
     #[inline(always)]
-    pub fn split(&mut self) -> SPLIT_W {
+    pub fn split(&mut self) -> SPLIT_W<'_> {
         SPLIT_W { w: self }
     }
 }

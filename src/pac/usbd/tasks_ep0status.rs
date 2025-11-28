@@ -33,7 +33,7 @@ impl<'a> TASKS_EP0STATUS_W<'a> {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn tasks_ep0status(&mut self) -> TASKS_EP0STATUS_W {
+    pub fn tasks_ep0status(&mut self) -> TASKS_EP0STATUS_W<'_> {
         TASKS_EP0STATUS_W { w: self }
     }
 }

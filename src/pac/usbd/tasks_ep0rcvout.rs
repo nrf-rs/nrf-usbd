@@ -33,7 +33,7 @@ impl<'a> TASKS_EP0RCVOUT_W<'a> {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn tasks_ep0rcvout(&mut self) -> TASKS_EP0RCVOUT_W {
+    pub fn tasks_ep0rcvout(&mut self) -> TASKS_EP0RCVOUT_W<'_> {
         TASKS_EP0RCVOUT_W { w: self }
     }
 }

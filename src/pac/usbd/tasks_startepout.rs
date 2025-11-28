@@ -34,7 +34,7 @@ impl<'a> TASKS_STARTEPOUT_W<'a> {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn tasks_startepout(&mut self) -> TASKS_STARTEPOUT_W {
+    pub fn tasks_startepout(&mut self) -> TASKS_STARTEPOUT_W<'_> {
         TASKS_STARTEPOUT_W { w: self }
     }
 }

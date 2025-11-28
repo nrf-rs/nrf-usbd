@@ -34,7 +34,7 @@ impl<'a> TASKS_STARTEPIN_W<'a> {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn tasks_startepin(&mut self) -> TASKS_STARTEPIN_W {
+    pub fn tasks_startepin(&mut self) -> TASKS_STARTEPIN_W<'_> {
         TASKS_STARTEPIN_W { w: self }
     }
 }

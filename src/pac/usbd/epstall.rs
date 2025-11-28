@@ -129,17 +129,17 @@ impl<'a> STALL_W<'a> {
 impl W {
     #[doc = "Bits 0:2 - Select endpoint number"]
     #[inline(always)]
-    pub fn ep(&mut self) -> EP_W {
+    pub fn ep(&mut self) -> EP_W<'_> {
         EP_W { w: self }
     }
     #[doc = "Bit 7 - Selects IN or OUT endpoint"]
     #[inline(always)]
-    pub fn io(&mut self) -> IO_W {
+    pub fn io(&mut self) -> IO_W<'_> {
         IO_W { w: self }
     }
     #[doc = "Bit 8 - Stall selected endpoint"]
     #[inline(always)]
-    pub fn stall(&mut self) -> STALL_W {
+    pub fn stall(&mut self) -> STALL_W<'_> {
         STALL_W { w: self }
     }
 }

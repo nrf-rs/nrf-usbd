@@ -45,7 +45,7 @@ impl R {
 impl W {
     #[doc = "Bit 0"]
     #[inline(always)]
-    pub fn events_endepin(&mut self) -> EVENTS_ENDEPIN_W {
+    pub fn events_endepin(&mut self) -> EVENTS_ENDEPIN_W<'_> {
         EVENTS_ENDEPIN_W { w: self }
     }
 }

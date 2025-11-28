@@ -424,30 +424,30 @@ impl W {
     #[doc = "Bit 0 - Shortcut between EP0DATADONE event and STARTEPIN\\[0\\]
 task"]
     #[inline(always)]
-    pub fn ep0datadone_startepin0(&mut self) -> EP0DATADONE_STARTEPIN0_W {
+    pub fn ep0datadone_startepin0(&mut self) -> EP0DATADONE_STARTEPIN0_W<'_> {
         EP0DATADONE_STARTEPIN0_W { w: self }
     }
     #[doc = "Bit 1 - Shortcut between EP0DATADONE event and STARTEPOUT\\[0\\]
 task"]
     #[inline(always)]
-    pub fn ep0datadone_startepout0(&mut self) -> EP0DATADONE_STARTEPOUT0_W {
+    pub fn ep0datadone_startepout0(&mut self) -> EP0DATADONE_STARTEPOUT0_W<'_> {
         EP0DATADONE_STARTEPOUT0_W { w: self }
     }
     #[doc = "Bit 2 - Shortcut between EP0DATADONE event and EP0STATUS task"]
     #[inline(always)]
-    pub fn ep0datadone_ep0status(&mut self) -> EP0DATADONE_EP0STATUS_W {
+    pub fn ep0datadone_ep0status(&mut self) -> EP0DATADONE_EP0STATUS_W<'_> {
         EP0DATADONE_EP0STATUS_W { w: self }
     }
     #[doc = "Bit 3 - Shortcut between ENDEPOUT\\[0\\]
 event and EP0STATUS task"]
     #[inline(always)]
-    pub fn endepout0_ep0status(&mut self) -> ENDEPOUT0_EP0STATUS_W {
+    pub fn endepout0_ep0status(&mut self) -> ENDEPOUT0_EP0STATUS_W<'_> {
         ENDEPOUT0_EP0STATUS_W { w: self }
     }
     #[doc = "Bit 4 - Shortcut between ENDEPOUT\\[0\\]
 event and EP0RCVOUT task"]
     #[inline(always)]
-    pub fn endepout0_ep0rcvout(&mut self) -> ENDEPOUT0_EP0RCVOUT_W {
+    pub fn endepout0_ep0rcvout(&mut self) -> ENDEPOUT0_EP0RCVOUT_W<'_> {
         ENDEPOUT0_EP0RCVOUT_W { w: self }
     }
 }
