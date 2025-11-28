@@ -7,7 +7,6 @@
 //!   * No notification when the status stage is ACK'd.
 
 use core::cell::Cell;
-use core::mem::MaybeUninit;
 use core::sync::atomic::{compiler_fence, Ordering};
 use critical_section::{CriticalSection, Mutex};
 use usb_device::{
@@ -375,12 +374,8 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
                 return Err(UsbError::WouldBlock);
             }
 
-            let mut ram_buf: MaybeUninit<[u8; 64]> = MaybeUninit::uninit();
-            unsafe {
-                let slice = &mut *ram_buf.as_mut_ptr();
-                slice[..buf.len()].copy_from_slice(buf);
-            }
-            let ram_buf = unsafe { ram_buf.assume_init() };
+            let mut ram_buf = [0u8; 64];
+            ram_buf[..buf.len()].copy_from_slice(buf);
 
             let epin = [
                 &regs.epin0,
