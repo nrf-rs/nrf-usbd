@@ -747,3 +747,83 @@ impl<T: UsbPeripheral> UsbBus for Usbd<T> {
         Ok(())
     }
 }
+
+/// Enable USB event interrupts used by [Usbd]
+///
+/// This must be done with a borrow of the USBD peripheral, prior to
+/// calling the [Usbd::new()] constructor.
+///
+/// This only enables the events of the USBD peripheral, you will
+/// Also need to activate the USBD interrupt in the NVIC. This is
+/// handled automatically if you are using RTIC with a hardware
+/// bound task.
+pub fn enable_usb_interrupts<T: UsbPeripheral>(_usbd: &T) {
+    let usbd = unsafe { &*(T::REGISTERS as *const RegisterBlock) };
+
+    usbd.intenset.write(|w| {
+        // rg -o "events_[a-z_0-9]+" ./usbd.rs | sort | uniq
+        w.endepin0().set_bit();
+        w.endepin1().set_bit();
+        w.endepin2().set_bit();
+        w.endepin3().set_bit();
+        w.endepin4().set_bit();
+        w.endepin5().set_bit();
+        w.endepin6().set_bit();
+        w.endepin7().set_bit();
+
+        w.endepout0().set_bit();
+        w.endepout1().set_bit();
+        w.endepout2().set_bit();
+        w.endepout3().set_bit();
+        w.endepout4().set_bit();
+        w.endepout5().set_bit();
+        w.endepout6().set_bit();
+        w.endepout7().set_bit();
+
+        w.ep0datadone().set_bit();
+        w.ep0setup().set_bit();
+        w.sof().set_bit();
+        w.usbevent().set_bit();
+        w.usbreset().set_bit();
+        w
+    });
+}
+
+/// Disable USB event interrupts used by [Usbd]
+///
+/// This must be done with a borrow of the USBD peripheral. This may
+/// require unsafe code to obtain, after the creation of [Usbd]
+///
+/// This only disables the events of the USBD peripheral, you will
+/// also need to deactivate the USBD interrupt in the NVIC.
+pub fn disable_usb_interrupts<T: UsbPeripheral>(_usbd: &T) {
+    let usbd = unsafe { &*(T::REGISTERS as *const RegisterBlock) };
+
+    usbd.intenclr.write(|w| {
+        // rg -o "events_[a-z_0-9]+" ./usbd.rs | sort | uniq
+        w.endepin0().set_bit();
+        w.endepin1().set_bit();
+        w.endepin2().set_bit();
+        w.endepin3().set_bit();
+        w.endepin4().set_bit();
+        w.endepin5().set_bit();
+        w.endepin6().set_bit();
+        w.endepin7().set_bit();
+
+        w.endepout0().set_bit();
+        w.endepout1().set_bit();
+        w.endepout2().set_bit();
+        w.endepout3().set_bit();
+        w.endepout4().set_bit();
+        w.endepout5().set_bit();
+        w.endepout6().set_bit();
+        w.endepout7().set_bit();
+
+        w.ep0datadone().set_bit();
+        w.ep0setup().set_bit();
+        w.sof().set_bit();
+        w.usbevent().set_bit();
+        w.usbreset().set_bit();
+        w
+    });
+}
